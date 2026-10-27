@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>React Channel - by JIYYAD TOOLS</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505;
+    --surface: #0c0c0c;
+    --border: #222222;
+    --accent: #e5ff00;
+    --text: #ffffff;
+    --text-muted: #888888;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center top;
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 5%;
+    border-bottom: 1px solid var(--border);
+    background: rgba(5,5,5,0.8);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .dot {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .owner {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    letter-spacing: 1px;
+  }
+
+  /* ===== MAIN LAYOUT ===== */
+  main {
+    flex: 1;
+    padding: 60px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  /* ===== HERO SECTION ===== */
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(4rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 0.9;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    letter-spacing: -3px;
+  }
+  .hero p {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 400px;
+    margin-bottom: 40px;
+  }
+  .limit-badge {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    border-left: 4px solid var(--accent);
+  }
+  .limit-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+  }
+  .limit-row span {
+    color: var(--accent);
+    font-size: 18px;
+  }
+  .reset-info {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ===== FORM PANEL ===== */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 40px;
+    position: relative;
+  }
+  .panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--accent);
+  }
+
+  .field {
+    margin-bottom: 32px;
+  }
+  .field label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .field input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .field input:focus { border-bottom-color: var(--accent); }
+  .field input::placeholder { color: #444; }
+
+  /* ===== EMOJI SELECTOR ===== */
+  .emoji-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .emoji-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    font-size: 28px;
+    width: 60px; height: 60px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+  }
+  .emoji-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+  .emoji-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(229,255,0,0.3);
+  }
+
+  /* ===== SUBMIT BUTTON ===== */
+  .btn-submit {
+    width: 100%;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-submit:hover:not(:disabled) { background: #fff; }
+  .btn-submit:disabled {
+    background: #222;
+    color: #555;
+    cursor: not-allowed;
+  }
+
+  /* ===== LOG CONSOLE ===== */
+  .console {
+    background: #000;
+    border: 1px solid var(--border);
+    padding: 16px;
+    height: 180px;
+    overflow-y: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    margin-top: 24px;
+    line-height: 1.5;
+    border-radius: 4px;
+  }
+  .console::-webkit-scrollbar { width: 4px; }
+  .console::-webkit-scrollbar-thumb { background: #333; }
+  .log-line { margin-bottom: 4px; word-break: break-all; }
+  .log-line.info { color: var(--text-muted); }
+  .log-line.success { color: var(--accent); }
+  .log-line.error { color: #ff3366; }
+  .log-line.warn { color: #ffaa00; }
+
+  @media (max-width: 900px) {
+    main {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 40px 5%;
+    }
+    .hero h1 { font-size: 4rem; }
+    .panel { padding: 24px; }
+    .emoji-btn { width: 50px; height: 50px; font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <div class="dot"></div>
+    REACT CHANNEL
+  </div>
+  <div class="owner">BY JIYYAD TOOLS</div>
+</nav>
+
+<main>
+  <div class="hero">
+    <h1>React<br>To<br>Posts.</h1>
+    <p>Send automated reactions to any WhatsApp Channel post instantly. Clean, fast, and reliable execution.</p>
+    
+    <div class="limit-badge">
+      <div class="limit-row">
+        QUOTA: <span id="limitText">10</span> / 10
+      </div>
+      <div class="reset-info">Reset otomatis besok pagi (06:00 WIB)</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="field">
+      <label>01 // CHANNEL URL</label>
+      <input type="text" id="urlInput" placeholder="https://whatsapp.com/channel/...">
+    </div>
+
+    <div class="field">
+      <label>02 // SELECT REACTION</label>
+      <div class="emoji-grid" id="emojiGrid">
+        <button class="emoji-btn active" data-emoji="👍">👍</button>
+        <button class="emoji-btn" data-emoji="❤️">❤️</button>
+        <button class="emoji-btn" data-emoji="😂">😂</button>
+        <button class="emoji-btn" data-emoji="😮">😮</button>
+        <button class="emoji-btn" data-emoji="😢">😢</button>
+        <button class="emoji-btn" data-emoji="🙏">🙏</button>
+      </div>
+    </div>
+
+    <button class="btn-submit" id="submitBtn" onclick="sendReaction()">
+      EXECUTE REACTION
+    </button>
+    
+    <div class="console" id="console">
+      <div class="log-line info">> System ready. Awaiting input.</div>
+    </div>
+  </div>
+</main>
+
+<script>
+/* ===== API OBFUSCATION ===== */
+const _a = atob('aHR0cHM6Ly9hcGkuamVyZXhkLm15LmlkL2FwaS93aGF0c2FwcC9yZWFjdGNo');
+const _b = atob('P2FwaWtleT1OOGJxS0R4ejJnNXZZcGR3');
+const API_URL = _a + _b;
+
+/* ===== STATE ===== */
+const MAX_LIMIT = 10;
+const RESET_HOUR = 6; // Jam 6 Pagi
+let currentEmoji = '👍';
+let limit = MAX_LIMIT;
+
+/* ===== RESET TIME LOGIC ===== */
+// Menghitung timestamp untuk jam 6 pagi berikutnya
+function getNextMorningReset() {
+  const now = new Date();
+  const reset = new Date(now.getFullYear(), now.getMonth(), now.getDate(), RESET_HOUR, 0, 0);
+  
+  // Jika sekarang sudah lewat dari jam 6 pagi, resetnya besok jam 6 pagi
+  if (now >= reset) {
+    reset.setDate(reset.getDate() + 1);
+  }
+  return reset.getTime();
+}
+
+function init() {
+  const savedLimit = localStorage.getItem('rc_limit');
+  const savedReset = localStorage.getItem('rc_reset');
+  const now = Date.now();
+  
+  // Cek apakah sudah melewati waktu reset pagi
+  if (!savedReset || now >= parseInt(savedReset)) {
+    limit = MAX_LIMIT;
+    const nextReset = getNextMorningReset();
+    localStorage.setItem('rc_limit', limit);
+    localStorage.setItem('rc_reset', nextReset);
+  } else {
+    limit = parseInt(savedLimit);
+  }
+  
+  updateLimitUI();
+
+  const emojiBtns = document.querySelectorAll('.emoji-btn');
+  emojiBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      emojiBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentEmoji = btn.getAttribute('data-emoji');
+    });
+  });
+
+  document.getElementById('urlInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendReaction();
+  });
+}
+
+function updateLimitUI() {
+  document.getElementById('limitText').textContent = limit;
+  const btn = document.getElementById('submitBtn');
+  
+  if (limit <= 0) {
+    btn.disabled = true;
+    btn.textContent = 'LIMIT HABIS (RESET BESOK PAGI)';
+  } else {
+    btn.disabled = false;
+    btn.textContent = 'EXECUTE REACTION';
+  }
+}
+
+function useLimit() {
+  limit--;
+  localStorage.setItem('rc_limit', limit);
+  updateLimitUI();
+}
+
+/* ===== LOGGER ===== */
+function log(msg, type = 'info') {
+  const consoleEl = document.getElementById('console');
+  const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+  const line = document.createElement('div');
+  line.className = `log-line ${type}`;
+  line.textContent = `[${time}] ${msg}`;
+  consoleEl.appendChild(line);
+  consoleEl.scrollTop = consoleEl.scrollHeight;
+}
+
+/* ===== EXECUTE REACTION ===== */
+async function sendReaction() {
+  const url = document.getElementById('urlInput').value.trim();
+  
+  if (!url) return log('URL tidak boleh kosong.', 'error');
+  if (!url.includes('whatsapp.com/channel')) return log('Format URL tidak valid.', 'error');
+  if (limit <= 0) return log('Limit habis. Kembali besok pagi.', 'error');
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'PROCESSING...';
+  log(`Mengirim reaksi ${currentEmoji}...`, 'info');
+
+  const payload = { url: url, reaction: currentEmoji };
+
+  try {
+    let res;
+    try {
+      res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      log('Direct blocked. Trying proxy...', 'warn');
+      const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(API_URL)}`;
+      res = await fetch(proxyUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
+
+    if (res.ok) {
+      const data = await res.json();
+      log(`✅ SUCCESS: ${JSON.stringify(data)}`, 'success');
+      useLimit();
+    } else {
+      log(`❌ GAGAL: HTTP ${res.status}`, 'error');
+    }
+  } catch (err) {
+    log(`❌ ERROR: ${err.message}`, 'error');
+  } finally {
+    if (limit > 0) {
+      btn.disabled = false;
+      btn.textContent = 'EXECUTE REACTION';
+    }
+  }
+}
+
+init();
+</script>
+</body>
+</html>
